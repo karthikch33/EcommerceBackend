@@ -259,7 +259,7 @@ export const forgotPasswordToken = asyncHandler(async (req,res)=>{
     try {
         const token = await user.createPasswordResetToken();
         await user.save()
-        const resetURL = `Hi ${firstname}, Please Follow This link to reset Your Passwrod. This link is valid till 30 minutes from now  <a href="https://ecc-frontend-olive-zeta.vercel.app/reset-password/${token}">Click Here</a> `
+        const resetURL = `Hi ${firstname}, Please Follow This link to reset Your Passwrod. This link is valid till 30 minutes from now  <a href="https://ecc-frontend-olive-zeta.vercel.app/reset-password/${token}">Click Here</a>`
         const data ={
             to:email,
             text:"Hey User",
