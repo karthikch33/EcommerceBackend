@@ -7,7 +7,6 @@ export const uploadImages = asyncHandler(async(req,res)=>{
         const uploader = (path)=>cloudinaryUploadImg(path,"images")
         const urls = []
         const files = req.files
-        console.log(files)
         for(const file of files){
             const {path} = file;
             const newpath = await uploader(path)
@@ -28,8 +27,7 @@ export const deleteImages = asyncHandler(async(req,res)=>{
     const {id} = req.params
     try {
         const deleteImage = await cloudinaryDeleteImg(id,'images')
-        res.json({message:"Deleted"})
-       
+        res.json({RemovedId:id})
     } catch (error) {
         throw new Error(error)
     }
