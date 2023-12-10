@@ -198,10 +198,10 @@ export const updateUser = asyncHandler(async(req,res)=>{
             mobile:req?.body.mobile,
         },{new:true})
 
-        res.json(updateuser)
+        res.json({status:201})
 
     } catch (error) {
-        throw new Error(error)
+        res.json({status:500,error})
     }
 })
 
