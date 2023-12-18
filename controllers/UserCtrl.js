@@ -24,7 +24,7 @@ export const createUser = asyncHandler( async (req,res)=>{
         
         const newUser = User.create(req.body)
         res.json(req.body)
-    }
+    }   
     else{
         throw new Error(`User Already Exists`)
     }
