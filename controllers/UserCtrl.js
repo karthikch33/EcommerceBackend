@@ -15,6 +15,14 @@ import { sendEmail } from "./emailCtrl.js";
 // import validateMongoDbId from "../utils/validateMongodbId.js";
 
 
+export const serveronoroff = asyncHandler(async(req,res)=>{
+    try {
+      res.json({status:201,message:'serverOn'})
+    } catch (error) {
+      res.json({status:404,message:'serverOff'})
+    }
+  })
+
 
 export const createUser = asyncHandler( async (req,res)=>{
     const {email} = req.body
