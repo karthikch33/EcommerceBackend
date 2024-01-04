@@ -23,10 +23,10 @@ export const createUser = asyncHandler( async (req,res)=>{
         // const newUser = new User(destructure)   one way new way is below
         
         const newUser = User.create(req.body)
-        res.json(req.body)
+        res.json({status:201})
     }   
     else{
-        throw new Error(`User Already Exists`)
+       res.json({status:404})
     }
 })
 
@@ -35,6 +35,8 @@ export const loginUserCtrl = asyncHandler(async (req,res)=>{
     const {email,password} = req.body;
     // check if user exist or not 
     const findUser = await User.findOne({email});
+
+    if(!findUser) res.json({status:405})
     
     if(findUser && await findUser.isPasswordMatched(password)){
         const refreshToken = await generateRefreshToken(findUser?._id)
@@ -44,7 +46,7 @@ export const loginUserCtrl = asyncHandler(async (req,res)=>{
 
         res.cookie('refreshToken',refreshToken,{
             httpOnly:true,
-            maxAge:72*60*60*1000
+            maxAge:72*1
         })
         
         res.json({
@@ -58,7 +60,7 @@ export const loginUserCtrl = asyncHandler(async (req,res)=>{
             refreshToken:generateToken(findUser?._id)
         })
     }else{
-        throw new Error(`Invalid Credentialss`)
+        res.json({status:404,message:"Invalid Credentials"})
     }
 })
 
@@ -508,6 +510,7 @@ export const getAllOrders = asyncHandler(async(req,res)=>{
         throw new Error(error)
     }
 })
+
 export const updateOrderStatus = asyncHandler(async(req,res)=>{
     const {_id} = req.params
     const {status} = req.body
