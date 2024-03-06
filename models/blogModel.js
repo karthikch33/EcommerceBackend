@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+// Updated GitHub URL
 var blogSchema = new mongoose.Schema({
     title:{
         type:String,
