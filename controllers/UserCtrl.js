@@ -45,6 +45,8 @@ export const loginUserCtrl = asyncHandler(async (req,res)=>{
     const findUser = await User.findOne({email});
 
     if(!findUser) res.json({status:405})
+
+    if(findUser?.isBlocked === true) res.json({status:409,message:"Account Blocked"})
     
     if(findUser && await findUser.isPasswordMatched(password)){
         const refreshToken = await generateRefreshToken(findUser?._id)
@@ -56,6 +58,8 @@ export const loginUserCtrl = asyncHandler(async (req,res)=>{
             httpOnly:true,
             maxAge:72*1
         })
+
+       
         
         res.json({
             _id:findUser?._id,
@@ -73,6 +77,8 @@ export const loginUserCtrl = asyncHandler(async (req,res)=>{
 })
 
 
+
+
 // admin login
 
 export const loginAdmin = asyncHandler(async (req,res)=>{
@@ -80,7 +86,7 @@ export const loginAdmin = asyncHandler(async (req,res)=>{
     // check if user exist or not 
     const findAdmin = await User.findOne({email});
     if(!findAdmin) res.json('Admin Data Not Recorded')
-    if(findAdmin.role !== 'admin') throw new Error('Not Authorized')
+    if(findAdmin?.role !== 'admin') throw new Error('Not Authorized')
     
     if(findAdmin && await findAdmin.isPasswordMatched(password)){
         const refreshToken = await generateRefreshToken(findAdmin?._id)
@@ -333,7 +339,7 @@ export const userCart = asyncHandler(async (req, res) => {
   
     try {
       const userCart = await User.findById(id);
-      const alreadyAddedItem = userCart.cart.some((item) => item?.productId.equals(productId));
+      const alreadyAddedItem = userCart?.cart?.some((item) => item?.productId.equals(productId));
   
       if (alreadyAddedItem) {
         const updatedUser = await User.findOneAndUpdate(
@@ -348,7 +354,7 @@ export const userCart = asyncHandler(async (req, res) => {
           },
           { new: true }
         );
-  
+
         if (updatedUser) {
           if (orderedQuantity > 0) {
             res.status(200).json({ message: 'Product Incremented to cart successfully', updatedUser });
@@ -378,8 +384,8 @@ export const userCart = asyncHandler(async (req, res) => {
     }
   });
 
-  
-  
+
+
 
 export const getUserCart = asyncHandler(async(req,res)=>{
     const {id} = req.params
