@@ -15,10 +15,10 @@ export const authMiddleWare = asyncHandler(async (req,res,next)=>{
                 next()
             }
         } catch (error) {
-            throw new Error(`Not Authorized Token expired, Please Login Again`)
+            res.json({status:403,message:"Session TimeOut Login Again"})
         }
     }else{
-        throw new Error(`There is no token attached to the headers`)
+        res.json({status:403,message:"Session TimeOut Login Again"})
     }
 })
 
