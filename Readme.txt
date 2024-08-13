@@ -30,3 +30,12 @@ this will modify your password before going too insert into mongodb
                 })}
                 onChange={e=>setColor(e)}
                 />
+
+
+
+const error = (err,req,res,next)=>{
+    res.json({
+        stack:err.stack,
+        message:err.message
+    })
+}
