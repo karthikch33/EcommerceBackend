@@ -7,6 +7,7 @@ import { checkout, paymentVerification } from "../controllers/paymentCtrl.js";
 const router = Router()
 
 
+
 router.route('/register').post(createUser)
 router.route('/login').post(loginUserCtrl)
 router.route('/serveronoroff').get(serveronoroff)

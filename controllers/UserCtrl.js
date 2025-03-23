@@ -39,6 +39,7 @@ export const createUser = asyncHandler( async (req,res)=>{
 })
 
 
+
 export const loginUserCtrl = asyncHandler(async (req,res)=>{
     const {email,password} = req.body;
     // check if user exist or not 
