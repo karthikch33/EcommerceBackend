@@ -546,24 +546,19 @@ export const updateOrderStatus = asyncHandler(async(req,res)=>{
 
 export const addToCompare = asyncHandler(async(req,res)=>{
     const {productId} = req.params
-    const actualId = productId.split(' ')[1] === "remover" ? productId.split(' ')[0] : productId;
-    const remover = productId.split(' ')[1] === "remover" ? "remover" : "notremover";
     const {_id} = req.user
     try {
         const findItem = await User.findById(_id).populate('compareItems')
-        const alreadyAdded = findItem?.compareItems?.find(item=>item?._id.toString() === actualId.toString())
+        const alreadyAdded = findItem?.compareItems?.find(item=>item?._id.toString() === productId?.toString())
         if(alreadyAdded)
         {
-            const updateCompareItems = await User.findById(_id)
-            if(remover ==='remover')
-            {
-                const cheating = await User.findByIdAndUpdate(_id,{$pull:{compareItems:actualId}},{new:true})
-            }
-            res.json({...updateCompareItems,alreadyExist:true})
+            const updateCompareItems = await User.findByIdAndUpdate(_id,{$pull:{compareItems:productId}},{new:true})
+            res.json({...updateCompareItems?._doc?.compareItems,status : 200})
         }
-        else{
-            const updateCompareItems = await User.findByIdAndUpdate(_id,{$push:{compareItems:actualId}},{new:true})
-            res.json({...updateCompareItems,alreadyExist:false})
+        else
+        {
+            const updateCompareItems = await User.findByIdAndUpdate(_id,{$push:{compareItems:productId}},{new:true})
+            res.json({...updateCompareItems?._doc?.compareItems, status : 403})
         }
     } catch (error) {
         throw new Error(error)
