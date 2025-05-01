@@ -18,6 +18,8 @@ export const authMiddleWare = asyncHandler(async (req,res,next)=>{
             res.json({status:403,message:"Session TimeOut Login Again"})
         }
     }else{
+        console.log(tokenavl)
+        console.log("Token Not Provided")
         res.json({status:403,message:"Session TimeOut Login Again"})
     }
 })

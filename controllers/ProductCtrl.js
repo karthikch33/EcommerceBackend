@@ -114,6 +114,7 @@ export const deleteProduct = asyncHandler(async (req,res)=>{
 })
 
 
+
 // add wishlist 
 
 export const addToWishList = asyncHandler(async(req,res)=>{
@@ -121,19 +122,20 @@ export const addToWishList = asyncHandler(async(req,res)=>{
     const {prodId} = req?.body;
     try {
         const user = await User.findById(_id).populate('wishlist');
-        const alreadyAdded = user.wishlist.find((id)=>id._id.toString() === prodId)
+        const alreadyAdded = user.wishlist.find((id)=>id?._id.toString() === prodId)
         if(alreadyAdded){
             let user = await User.findByIdAndUpdate(_id,{$pull:{wishlist:prodId}},{new:true});
-            res.json(user)
+            res.json({status :'Removed from Wishlist'})
         }   
         else{
             let user = await User.findByIdAndUpdate(_id,{$push:{wishlist:prodId}},{new:true})
-            res.json(user)
+            res.json({status: 'Added to Wishlist'})
         }
     } catch (error) {
         throw new Error(error)
     }
 })
+
 
 // rating 
 

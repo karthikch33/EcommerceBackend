@@ -58,6 +58,10 @@ const userSchema =new  mongoose.Schema({
             ref:'ProductA'
         }
     ],
+    orders :[{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'ProductA'
+    }],
     refreshToken:{
         type:String,
         default:""

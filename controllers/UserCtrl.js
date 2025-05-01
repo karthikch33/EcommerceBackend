@@ -57,7 +57,7 @@ export const loginUserCtrl = asyncHandler(async (req,res)=>{
 
         res.cookie('refreshToken',refreshToken,{
             httpOnly:true,
-            maxAge:72*1
+            maxAge:72 * 60 * 60 * 1000
         })
 
        
@@ -503,6 +503,7 @@ export const createOrder = asyncHandler(async (req,res)=>{
         })
         res.json({order,success:true})
     } catch (error) {
+        console.log(error);
         throw new Error(error)
     }
 })
@@ -510,7 +511,7 @@ export const createOrder = asyncHandler(async (req,res)=>{
 export const getOrders = asyncHandler(async(req,res)=>{
     const {_id} = req?.user
     try {
-        const userorders = await Order.findOne({orderby:_id}).populate("products.product").populate("orderby").exec()
+        const userorders = await Order.find({user:_id}).populate("orderItems.product").exec()
         res.json(userorders)
     } catch (error) {
         throw new Error(error)
@@ -553,18 +554,17 @@ export const addToCompare = asyncHandler(async(req,res)=>{
         if(alreadyAdded)
         {
             const updateCompareItems = await User.findByIdAndUpdate(_id,{$pull:{compareItems:productId}},{new:true})
-            res.json({...updateCompareItems?._doc?.compareItems,status : 200})
+            res.json({...updateCompareItems?._doc?.compareItems,status : 403})
         }
         else
         {
             const updateCompareItems = await User.findByIdAndUpdate(_id,{$push:{compareItems:productId}},{new:true})
-            res.json({...updateCompareItems?._doc?.compareItems, status : 403})
+            res.json({...updateCompareItems?._doc?.compareItems, status : 200})
         }
     } catch (error) {
         throw new Error(error)
     }
 })
-
 
 // Get CompareItems
 
