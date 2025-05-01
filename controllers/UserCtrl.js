@@ -494,13 +494,19 @@ export const applyCoupon = asyncHandler(async(req,res)=>{
 // })
 
 export const createOrder = asyncHandler(async (req,res)=>{
-    console.log(req.body);
     const {shippingInfo,orderItems,totalPrice,totalPriceAfterDiscount,paymentInfo} = req.body
     const {_id} = req?.user
     try {
         const order = await Order.create({
             shippingInfo,orderItems,totalPrice,totalPriceAfterDiscount,paymentInfo,user:_id
         })
+        for(let i = 0; i < orderItems.length; i++){
+            const product = await exModel.findById(orderItems[i].product);
+            if(!product) throw new Error('Product not found');
+            product.quantity -= orderItems[i].quantity;
+            product.sold += orderItems[i].quantity;
+            await product.save();
+        }
         res.json({order,success:true})
     } catch (error) {
         console.log(error);
